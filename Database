@@ -1,0 +1,1130 @@
+USE [master]
+GO
+/****** Object:  Database [FlightBooking]    Script Date: 7/14/2025 1:58:23 PM ******/
+CREATE DATABASE [FlightBooking]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'FlightBooking', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\FlightBooking.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'FlightBooking_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\FlightBooking_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [FlightBooking] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [FlightBooking].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [FlightBooking] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [FlightBooking] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [FlightBooking] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [FlightBooking] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [FlightBooking] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [FlightBooking] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [FlightBooking] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [FlightBooking] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [FlightBooking] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [FlightBooking] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [FlightBooking] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [FlightBooking] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [FlightBooking] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [FlightBooking] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [FlightBooking] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [FlightBooking] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [FlightBooking] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [FlightBooking] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [FlightBooking] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [FlightBooking] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [FlightBooking] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [FlightBooking] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [FlightBooking] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [FlightBooking] SET  MULTI_USER 
+GO
+ALTER DATABASE [FlightBooking] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [FlightBooking] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [FlightBooking] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [FlightBooking] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [FlightBooking] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [FlightBooking] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [FlightBooking] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [FlightBooking] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [FlightBooking]
+GO
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[aircraft_types]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[aircraft_types](
+	[aircraft_type_id] [int] IDENTITY(1,1) NOT NULL,
+	[aircraft_model] [nvarchar](50) NOT NULL,
+	[manufacturer] [nvarchar](50) NOT NULL,
+	[total_seats] [int] NOT NULL,
+	[economy_seats] [int] NOT NULL,
+	[business_seats] [int] NOT NULL,
+	[first_class_seats] [int] NOT NULL,
+	[seat_map_layout] [nvarchar](20) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[aircraft_type_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[airlines]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[airlines](
+	[airline_id] [int] IDENTITY(1,1) NOT NULL,
+	[airline_code] [nvarchar](10) NOT NULL,
+	[airline_name] [nvarchar](100) NOT NULL,
+	[logo_url] [nvarchar](255) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[airline_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[airports]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[airports](
+	[airport_id] [int] IDENTITY(1,1) NOT NULL,
+	[airport_code] [nvarchar](10) NOT NULL,
+	[airport_name] [nvarchar](100) NOT NULL,
+	[city] [nvarchar](50) NOT NULL,
+	[country] [nvarchar](50) NOT NULL,
+	[timezone] [nvarchar](50) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[airport_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[booking_seats]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[booking_seats](
+	[booking_seat_id] [int] IDENTITY(1,1) NOT NULL,
+	[booking_id] [int] NOT NULL,
+	[seat_id] [int] NOT NULL,
+	[passenger_name] [nvarchar](100) NOT NULL,
+	[passenger_id_number] [nvarchar](50) NULL,
+	[seat_price] [decimal](10, 2) NOT NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[booking_seat_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[bookings]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[bookings](
+	[booking_id] [int] IDENTITY(1,1) NOT NULL,
+	[booking_reference] [nvarchar](20) NOT NULL,
+	[user_id] [int] NOT NULL,
+	[flight_id] [int] NOT NULL,
+	[booking_status] [nvarchar](20) NULL,
+	[total_amount] [decimal](10, 2) NOT NULL,
+	[payment_status] [nvarchar](20) NULL,
+	[booking_date] [datetime2](7) NULL,
+	[notes] [ntext] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[booking_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[flights]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[flights](
+	[flight_id] [int] IDENTITY(1,1) NOT NULL,
+	[flight_number] [nvarchar](20) NOT NULL,
+	[airline_id] [int] NOT NULL,
+	[aircraft_type_id] [int] NOT NULL,
+	[departure_airport_id] [int] NOT NULL,
+	[arrival_airport_id] [int] NOT NULL,
+	[departure_time] [datetime2](7) NOT NULL,
+	[arrival_time] [datetime2](7) NOT NULL,
+	[base_price] [decimal](10, 2) NOT NULL,
+	[status] [nvarchar](20) NULL,
+	[gate] [nvarchar](10) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[flight_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Notifications]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Notifications](
+	[NotificationId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[Title] [nvarchar](100) NOT NULL,
+	[Message] [nvarchar](500) NOT NULL,
+	[Type] [nvarchar](20) NOT NULL,
+	[Status] [nvarchar](20) NOT NULL,
+	[RelatedBookingId] [int] NULL,
+	[RelatedFlightId] [int] NULL,
+	[CreatedAt] [datetime2](7) NOT NULL,
+	[ReadAt] [datetime2](7) NULL,
+	[AdditionalData] [nvarchar](1000) NULL,
+ CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED 
+(
+	[NotificationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PasswordResetTokens]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PasswordResetTokens](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Email] [nvarchar](100) NOT NULL,
+	[OtpCode] [nvarchar](6) NOT NULL,
+	[ExpirationTime] [datetime2](7) NOT NULL,
+	[IsUsed] [bit] NOT NULL,
+ CONSTRAINT [PK_PasswordResetTokens] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Payments]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Payments](
+	[PaymentId] [int] IDENTITY(1,1) NOT NULL,
+	[BookingId] [int] NOT NULL,
+	[PaymentMethod] [nvarchar](50) NOT NULL,
+	[TransactionId] [nvarchar](100) NOT NULL,
+	[Amount] [decimal](10, 2) NOT NULL,
+	[Status] [nvarchar](20) NOT NULL,
+	[CreatedAt] [datetime2](7) NOT NULL,
+	[ProcessedAt] [datetime2](7) NULL,
+	[Notes] [nvarchar](500) NULL,
+	[PaymentData] [nvarchar](1000) NULL,
+ CONSTRAINT [PK_Payments] PRIMARY KEY CLUSTERED 
+(
+	[PaymentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[seat_classes]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[seat_classes](
+	[class_id] [int] IDENTITY(1,1) NOT NULL,
+	[class_name] [nvarchar](20) NOT NULL,
+	[class_description] [nvarchar](100) NULL,
+	[price_multiplier] [decimal](3, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[class_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[seats]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[seats](
+	[seat_id] [int] IDENTITY(1,1) NOT NULL,
+	[flight_id] [int] NOT NULL,
+	[seat_number] [nvarchar](10) NOT NULL,
+	[seat_row] [int] NOT NULL,
+	[seat_column] [nvarchar](2) NOT NULL,
+	[class_id] [int] NOT NULL,
+	[is_window] [bit] NULL,
+	[is_aisle] [bit] NULL,
+	[is_emergency_exit] [bit] NULL,
+	[extra_fee] [decimal](10, 2) NULL,
+	[is_available] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[seat_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[users]    Script Date: 7/14/2025 1:58:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[users](
+	[user_id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [nvarchar](50) NOT NULL,
+	[email] [nvarchar](100) NOT NULL,
+	[password] [nvarchar](255) NOT NULL,
+	[full_name] [nvarchar](100) NOT NULL,
+	[phone] [nvarchar](20) NULL,
+	[date_of_birth] [date] NULL,
+	[gender] [nvarchar](10) NULL,
+	[created_at] [datetime2](7) NULL,
+	[updated_at] [datetime2](7) NULL,
+	[is_active] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20250628095056_UpdateDatabaseAddMore2TableArePaymentAndNotify', N'8.0.10')
+INSERT [dbo].[__EFMigrationsHistory] ([MigrationId], [ProductVersion]) VALUES (N'20250710050410_AddPasswordResetTokensTable', N'8.0.10')
+GO
+SET IDENTITY_INSERT [dbo].[aircraft_types] ON 
+
+INSERT [dbo].[aircraft_types] ([aircraft_type_id], [aircraft_model], [manufacturer], [total_seats], [economy_seats], [business_seats], [first_class_seats], [seat_map_layout]) VALUES (1, N'A321', N'Airbus', 220, 208, 12, 0, N'3-3')
+INSERT [dbo].[aircraft_types] ([aircraft_type_id], [aircraft_model], [manufacturer], [total_seats], [economy_seats], [business_seats], [first_class_seats], [seat_map_layout]) VALUES (2, N'A320', N'Airbus', 180, 174, 6, 0, N'3-3')
+INSERT [dbo].[aircraft_types] ([aircraft_type_id], [aircraft_model], [manufacturer], [total_seats], [economy_seats], [business_seats], [first_class_seats], [seat_map_layout]) VALUES (3, N'Boeing 787', N'Boeing', 350, 314, 28, 8, N'3-3-3')
+INSERT [dbo].[aircraft_types] ([aircraft_type_id], [aircraft_model], [manufacturer], [total_seats], [economy_seats], [business_seats], [first_class_seats], [seat_map_layout]) VALUES (4, N'ATR 72', N'ATR', 72, 72, 0, 0, N'2-2')
+INSERT [dbo].[aircraft_types] ([aircraft_type_id], [aircraft_model], [manufacturer], [total_seats], [economy_seats], [business_seats], [first_class_seats], [seat_map_layout]) VALUES (5, N'Boeing 737', N'Boeing', 189, 183, 6, 0, N'3-3')
+SET IDENTITY_INSERT [dbo].[aircraft_types] OFF
+GO
+SET IDENTITY_INSERT [dbo].[airlines] ON 
+
+INSERT [dbo].[airlines] ([airline_id], [airline_code], [airline_name], [logo_url], [created_at]) VALUES (1, N'VN', N'Vietnam Airlines', N'https://logo.vietnamairlines.com/vn_logo.png', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airlines] ([airline_id], [airline_code], [airline_name], [logo_url], [created_at]) VALUES (2, N'VJ', N'VietJet Air', N'https://logo.vietjetair.com/vj_logo.png', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airlines] ([airline_id], [airline_code], [airline_name], [logo_url], [created_at]) VALUES (3, N'BL', N'Jetstar Pacific', N'https://logo.jetstar.com/bl_logo.png', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airlines] ([airline_id], [airline_code], [airline_name], [logo_url], [created_at]) VALUES (4, N'QH', N'Bamboo Airways', N'https://logo.bambooairways.com/qh_logo.png', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airlines] ([airline_id], [airline_code], [airline_name], [logo_url], [created_at]) VALUES (5, N'VU', N'Vietravel Airlines', N'https://logo.vietravel.com/vu_logo.png', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+SET IDENTITY_INSERT [dbo].[airlines] OFF
+GO
+SET IDENTITY_INSERT [dbo].[airports] ON 
+
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (1, N'HAN', N'Sân bay quốc tế Nội Bài', N'Hà Nội', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (2, N'SGN', N'Sân bay quốc tế Tân Sơn Nhất', N'Hồ Chí Minh', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (3, N'DAD', N'Sân bay quốc tế Đà Nẵng', N'Đà Nẵng', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (4, N'CXR', N'Sân bay quốc tế Cam Ranh', N'Nha Trang', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (5, N'PQC', N'Sân bay quốc tế Phú Quốc', N'Phú Quốc', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (6, N'HPH', N'Sân bay Cát Bi', N'Hải Phòng', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+INSERT [dbo].[airports] ([airport_id], [airport_code], [airport_name], [city], [country], [timezone], [created_at]) VALUES (7, N'HUI', N'Sân bay Phú Bài', N'Huế', N'Việt Nam', N'Asia/Ho_Chi_Minh', CAST(N'2025-07-08T22:24:30.6000000' AS DateTime2))
+SET IDENTITY_INSERT [dbo].[airports] OFF
+GO
+SET IDENTITY_INSERT [dbo].[booking_seats] ON 
+
+INSERT [dbo].[booking_seats] ([booking_seat_id], [booking_id], [seat_id], [passenger_name], [passenger_id_number], [seat_price], [created_at]) VALUES (1, 1, 1, N'Nguyễn Văn A', N'123456789', CAST(2500000.00 AS Decimal(10, 2)), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[booking_seats] ([booking_seat_id], [booking_id], [seat_id], [passenger_name], [passenger_id_number], [seat_price], [created_at]) VALUES (2, 2, 2, N'Trần Thị B', N'987654321', CAST(2200000.00 AS Decimal(10, 2)), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[booking_seats] ([booking_seat_id], [booking_id], [seat_id], [passenger_name], [passenger_id_number], [seat_price], [created_at]) VALUES (3, 3, 3, N'Lê Văn Cường', N'456789123', CAST(1800000.00 AS Decimal(10, 2)), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[booking_seats] ([booking_seat_id], [booking_id], [seat_id], [passenger_name], [passenger_id_number], [seat_price], [created_at]) VALUES (4, 4, 4, N'Phạm Thị Dung', N'789123456', CAST(1500000.00 AS Decimal(10, 2)), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[booking_seats] ([booking_seat_id], [booking_id], [seat_id], [passenger_name], [passenger_id_number], [seat_price], [created_at]) VALUES (5, 5, 5, N'Hoàng Văn E', N'321654987', CAST(3200000.00 AS Decimal(10, 2)), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+SET IDENTITY_INSERT [dbo].[booking_seats] OFF
+GO
+SET IDENTITY_INSERT [dbo].[bookings] ON 
+
+INSERT [dbo].[bookings] ([booking_id], [booking_reference], [user_id], [flight_id], [booking_status], [total_amount], [payment_status], [booking_date], [notes]) VALUES (1, N'VN2507001', 1, 1, N'CONFIRMED', CAST(2500000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T14:30:00.0000000' AS DateTime2), N'Đặt vé thành công')
+INSERT [dbo].[bookings] ([booking_id], [booking_reference], [user_id], [flight_id], [booking_status], [total_amount], [payment_status], [booking_date], [notes]) VALUES (2, N'VJ2507002', 2, 2, N'CONFIRMED', CAST(2200000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T15:45:00.0000000' AS DateTime2), N'Khách hàng VIP')
+INSERT [dbo].[bookings] ([booking_id], [booking_reference], [user_id], [flight_id], [booking_status], [total_amount], [payment_status], [booking_date], [notes]) VALUES (3, N'BL2507003', 3, 3, N'PENDING', CAST(1800000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T16:20:00.0000000' AS DateTime2), N'Đang chờ thanh toán')
+INSERT [dbo].[bookings] ([booking_id], [booking_reference], [user_id], [flight_id], [booking_status], [total_amount], [payment_status], [booking_date], [notes]) VALUES (4, N'QH2507004', 4, 4, N'CANCELLED', CAST(1500000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T17:10:00.0000000' AS DateTime2), N'Đặt vé cho gia đình')
+INSERT [dbo].[bookings] ([booking_id], [booking_reference], [user_id], [flight_id], [booking_status], [total_amount], [payment_status], [booking_date], [notes]) VALUES (5, N'VU2507005', 5, 5, N'CANCELLED', CAST(3200000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T18:00:00.0000000' AS DateTime2), N'Chuyến bay du lịch')
+SET IDENTITY_INSERT [dbo].[bookings] OFF
+GO
+SET IDENTITY_INSERT [dbo].[flights] ON 
+
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (1, N'VN101', 1, 1, 1, 2, CAST(N'2025-07-15T06:00:00.0000000' AS DateTime2), CAST(N'2025-07-15T08:15:00.0000000' AS DateTime2), CAST(2500000.00 AS Decimal(10, 2)), N'SCHEDULED', N'A1', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (2, N'VJ201', 2, 2, 2, 1, CAST(N'2025-07-15T10:30:00.0000000' AS DateTime2), CAST(N'2025-07-15T12:45:00.0000000' AS DateTime2), CAST(2200000.00 AS Decimal(10, 2)), N'SCHEDULED', N'B2', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (3, N'BL301', 3, 3, 1, 3, CAST(N'2025-07-16T14:00:00.0000000' AS DateTime2), CAST(N'2025-07-16T15:30:00.0000000' AS DateTime2), CAST(1800000.00 AS Decimal(10, 2)), N'SCHEDULED', N'C3', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (4, N'QH401', 4, 4, 3, 4, CAST(N'2025-07-16T16:15:00.0000000' AS DateTime2), CAST(N'2025-07-16T17:30:00.0000000' AS DateTime2), CAST(1500000.00 AS Decimal(10, 2)), N'SCHEDULED', N'D4', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (5, N'VU501', 5, 5, 2, 5, CAST(N'2025-07-17T08:45:00.0000000' AS DateTime2), CAST(N'2025-07-17T10:00:00.0000000' AS DateTime2), CAST(3200000.00 AS Decimal(10, 2)), N'SCHEDULED', N'E5', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (6, N'VN102', 1, 1, 2, 1, CAST(N'2025-07-15T20:00:00.0000000' AS DateTime2), CAST(N'2025-07-15T22:15:00.0000000' AS DateTime2), CAST(2500000.00 AS Decimal(10, 2)), N'SCHEDULED', N'A2', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[flights] ([flight_id], [flight_number], [airline_id], [aircraft_type_id], [departure_airport_id], [arrival_airport_id], [departure_time], [arrival_time], [base_price], [status], [gate], [created_at]) VALUES (7, N'VJ202', 2, 2, 1, 6, CAST(N'2025-07-18T07:30:00.0000000' AS DateTime2), CAST(N'2025-07-18T08:45:00.0000000' AS DateTime2), CAST(1200000.00 AS Decimal(10, 2)), N'SCHEDULED', N'B3', CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+SET IDENTITY_INSERT [dbo].[flights] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Notifications] ON 
+
+INSERT [dbo].[Notifications] ([NotificationId], [UserId], [Title], [Message], [Type], [Status], [RelatedBookingId], [RelatedFlightId], [CreatedAt], [ReadAt], [AdditionalData]) VALUES (1, 1, N'Xác nhận đặt vé', N'Vé của bạn đã được xác nhận thành công. Mã đặt vé: VN2507001', N'BOOKING', N'UNREAD', 1, 1, CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), CAST(N'2025-07-11T20:18:18.8150637' AS DateTime2), N'{"booking_ref": "VN2507001"}')
+INSERT [dbo].[Notifications] ([NotificationId], [UserId], [Title], [Message], [Type], [Status], [RelatedBookingId], [RelatedFlightId], [CreatedAt], [ReadAt], [AdditionalData]) VALUES (2, 2, N'Thanh toán thành công', N'Thanh toán cho vé máy bay VJ201 đã được xử lý thành công', N'PAYMENT', N'UNREAD', 2, 2, CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), N'{"amount": 2200000}')
+INSERT [dbo].[Notifications] ([NotificationId], [UserId], [Title], [Message], [Type], [Status], [RelatedBookingId], [RelatedFlightId], [CreatedAt], [ReadAt], [AdditionalData]) VALUES (3, 3, N'Nhắc nhở thanh toán', N'Vui lòng hoàn tất thanh toán cho đặt vé BL2507003 trong vòng 24h', N'REMINDER', N'UNREAD', 3, 3, CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), NULL, N'{"deadline": "2025-07-09T16:20:00"}')
+INSERT [dbo].[Notifications] ([NotificationId], [UserId], [Title], [Message], [Type], [Status], [RelatedBookingId], [RelatedFlightId], [CreatedAt], [ReadAt], [AdditionalData]) VALUES (4, 4, N'Thông báo chuyến bay', N'Chuyến bay QH401 của bạn sẽ khởi hành đúng giờ', N'FLIGHT', N'UNREAD', 4, 4, CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), CAST(N'2025-07-11T22:52:35.7563765' AS DateTime2), N'{"departure_time": "2025-07-16T16:15:00"}')
+INSERT [dbo].[Notifications] ([NotificationId], [UserId], [Title], [Message], [Type], [Status], [RelatedBookingId], [RelatedFlightId], [CreatedAt], [ReadAt], [AdditionalData]) VALUES (5, 5, N'Check-in trực tuyến', N'Bạn có thể check-in trực tuyến cho chuyến bay VU501 từ 24h trước giờ khởi hành', N'CHECK_IN', N'UNREAD', 5, 5, CAST(N'2025-07-08T22:24:30.6533333' AS DateTime2), CAST(N'2025-07-11T22:05:58.6726116' AS DateTime2), N'{"checkin_available": "2025-07-16T08:45:00"}')
+SET IDENTITY_INSERT [dbo].[Notifications] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Payments] ON 
+
+INSERT [dbo].[Payments] ([PaymentId], [BookingId], [PaymentMethod], [TransactionId], [Amount], [Status], [CreatedAt], [ProcessedAt], [Notes], [PaymentData]) VALUES (1, 1, N'MOMO', N'MOMO_2025070801', CAST(2500000.00 AS Decimal(10, 2)), N'COMPLETED', CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), N'Thanh toán qua MoMo', N'{"wallet_id": "0901234567"}')
+INSERT [dbo].[Payments] ([PaymentId], [BookingId], [PaymentMethod], [TransactionId], [Amount], [Status], [CreatedAt], [ProcessedAt], [Notes], [PaymentData]) VALUES (2, 2, N'VNPAY', N'VNPAY_2025070802', CAST(2200000.00 AS Decimal(10, 2)), N'COMPLETED', CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), N'Thanh toán qua VNPay', N'{"bank_code": "NCB"}')
+INSERT [dbo].[Payments] ([PaymentId], [BookingId], [PaymentMethod], [TransactionId], [Amount], [Status], [CreatedAt], [ProcessedAt], [Notes], [PaymentData]) VALUES (3, 3, N'ZALOPAY', N'ZALO_2025070803', CAST(1800000.00 AS Decimal(10, 2)), N'PENDING', CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), NULL, N'Đang xử lý thanh toán', N'{"phone": "0923456789"}')
+INSERT [dbo].[Payments] ([PaymentId], [BookingId], [PaymentMethod], [TransactionId], [Amount], [Status], [CreatedAt], [ProcessedAt], [Notes], [PaymentData]) VALUES (4, 4, N'PAYPAL', N'PAYPAL_2025070804', CAST(1500000.00 AS Decimal(10, 2)), N'COMPLETED', CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), N'Thanh toán qua PayPal', N'{"email": "phamthidung@gmail.com"}')
+INSERT [dbo].[Payments] ([PaymentId], [BookingId], [PaymentMethod], [TransactionId], [Amount], [Status], [CreatedAt], [ProcessedAt], [Notes], [PaymentData]) VALUES (5, 5, N'CREDIT_CARD', N'VISA_2025070805', CAST(3200000.00 AS Decimal(10, 2)), N'COMPLETED', CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2), N'Thanh toán bằng thẻ tín dụng', N'{"card_type": "VISA", "last_4": "1234"}')
+SET IDENTITY_INSERT [dbo].[Payments] OFF
+GO
+SET IDENTITY_INSERT [dbo].[seat_classes] ON 
+
+INSERT [dbo].[seat_classes] ([class_id], [class_name], [class_description], [price_multiplier]) VALUES (1, N'ECONOMY', N'Hạng phổ thông', CAST(1.00 AS Decimal(3, 2)))
+INSERT [dbo].[seat_classes] ([class_id], [class_name], [class_description], [price_multiplier]) VALUES (2, N'BUSINESS', N'Hạng thương gia', CAST(2.50 AS Decimal(3, 2)))
+INSERT [dbo].[seat_classes] ([class_id], [class_name], [class_description], [price_multiplier]) VALUES (3, N'FIRST_CLASS', N'Hạng nhất', CAST(4.00 AS Decimal(3, 2)))
+SET IDENTITY_INSERT [dbo].[seat_classes] OFF
+GO
+SET IDENTITY_INSERT [dbo].[seats] ON 
+
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (1, 1, N'1A', 1, N'A', 3, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6066667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (2, 1, N'1B', 1, N'B', 3, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (3, 1, N'1E', 1, N'E', 3, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (4, 1, N'1F', 1, N'F', 3, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (5, 1, N'2A', 2, N'A', 3, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (6, 1, N'2B', 2, N'B', 3, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (7, 1, N'2E', 2, N'E', 3, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (8, 1, N'2F', 2, N'F', 3, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (9, 1, N'3A', 3, N'A', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (10, 1, N'3B', 3, N'B', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6100000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (11, 1, N'3E', 3, N'E', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (12, 1, N'3F', 3, N'F', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (13, 1, N'4A', 4, N'A', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (14, 1, N'4B', 4, N'B', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (15, 1, N'4E', 4, N'E', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (16, 1, N'4F', 4, N'F', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (17, 1, N'5A', 5, N'A', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (18, 1, N'5B', 5, N'B', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (19, 1, N'5E', 5, N'E', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (20, 1, N'5F', 5, N'F', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6133333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (21, 1, N'6A', 6, N'A', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (22, 1, N'6B', 6, N'B', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (23, 1, N'6E', 6, N'E', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (24, 1, N'6F', 6, N'F', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (25, 1, N'7A', 7, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (26, 1, N'7B', 7, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (27, 1, N'7C', 7, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (28, 1, N'7D', 7, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (29, 1, N'7E', 7, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6166667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (30, 1, N'7F', 7, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (31, 1, N'8A', 8, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (32, 1, N'8B', 8, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (33, 1, N'8C', 8, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (34, 1, N'8D', 8, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (35, 1, N'8E', 8, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (36, 1, N'8F', 8, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (37, 1, N'9A', 9, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (38, 1, N'9B', 9, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (39, 1, N'9C', 9, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (40, 1, N'9D', 9, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (41, 1, N'9E', 9, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (42, 1, N'9F', 9, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (43, 1, N'10A', 10, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6200000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (44, 1, N'10B', 10, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (45, 1, N'10C', 10, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (46, 1, N'10D', 10, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (47, 1, N'10E', 10, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (48, 1, N'10F', 10, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (49, 1, N'11A', 11, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (50, 1, N'11B', 11, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (51, 1, N'11C', 11, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (52, 1, N'11D', 11, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (53, 1, N'11E', 11, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (54, 1, N'11F', 11, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6233333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (55, 1, N'12A', 12, N'A', 1, 1, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (56, 1, N'12B', 12, N'B', 1, 0, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (57, 1, N'12C', 12, N'C', 1, 0, 1, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (58, 1, N'12D', 12, N'D', 1, 0, 1, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (59, 1, N'12E', 12, N'E', 1, 0, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (60, 1, N'12F', 12, N'F', 1, 1, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (61, 1, N'13A', 13, N'A', 1, 1, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (62, 1, N'13B', 13, N'B', 1, 0, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (63, 1, N'13C', 13, N'C', 1, 0, 1, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (64, 1, N'13D', 13, N'D', 1, 0, 1, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (65, 1, N'13E', 13, N'E', 1, 0, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (66, 1, N'13F', 13, N'F', 1, 1, 0, 1, CAST(200000.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (67, 1, N'14A', 14, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (68, 1, N'14B', 14, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (69, 1, N'14C', 14, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (70, 1, N'14D', 14, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (71, 1, N'14E', 14, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (72, 1, N'14F', 14, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (73, 1, N'15A', 15, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (74, 1, N'15B', 15, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (75, 1, N'15C', 15, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (76, 1, N'15D', 15, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (77, 1, N'15E', 15, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (78, 1, N'15F', 15, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (79, 1, N'16A', 16, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (80, 1, N'16B', 16, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6300000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (81, 1, N'16C', 16, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (82, 1, N'16D', 16, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (83, 1, N'16E', 16, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (84, 1, N'16F', 16, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (85, 1, N'17A', 17, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (86, 1, N'17B', 17, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (87, 1, N'17C', 17, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (88, 1, N'17D', 17, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (89, 1, N'17E', 17, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (90, 1, N'17F', 17, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (91, 1, N'18A', 18, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (92, 1, N'18B', 18, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (93, 1, N'18C', 18, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (94, 1, N'18D', 18, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (95, 1, N'18E', 18, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (96, 1, N'18F', 18, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (97, 1, N'19A', 19, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (98, 1, N'19B', 19, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (99, 1, N'19C', 19, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+GO
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (100, 1, N'19D', 19, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (101, 1, N'19E', 19, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (102, 1, N'19F', 19, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (103, 1, N'20A', 20, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (104, 1, N'20B', 20, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (105, 1, N'20C', 20, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (106, 1, N'20D', 20, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (107, 1, N'20E', 20, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (108, 1, N'20F', 20, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (109, 1, N'21A', 21, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (110, 1, N'21B', 21, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6333333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (111, 1, N'21C', 21, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (112, 1, N'21D', 21, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (113, 1, N'21E', 21, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (114, 1, N'21F', 21, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (115, 1, N'22A', 22, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (116, 1, N'22B', 22, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (117, 1, N'22C', 22, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (118, 1, N'22D', 22, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (119, 1, N'22E', 22, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (120, 1, N'22F', 22, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (121, 1, N'23A', 23, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (122, 1, N'23B', 23, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (123, 1, N'23C', 23, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (124, 1, N'23D', 23, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (125, 1, N'23E', 23, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (126, 1, N'23F', 23, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (127, 1, N'24A', 24, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (128, 1, N'24B', 24, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (129, 1, N'24C', 24, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (130, 1, N'24D', 24, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (131, 1, N'24E', 24, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (132, 1, N'24F', 24, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (133, 1, N'25A', 25, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (134, 1, N'25B', 25, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (135, 1, N'25C', 25, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (136, 1, N'25D', 25, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6366667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (137, 1, N'25E', 25, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (138, 1, N'25F', 25, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (139, 1, N'26A', 26, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (140, 1, N'26B', 26, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (141, 1, N'26C', 26, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (142, 1, N'26D', 26, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (143, 1, N'26E', 26, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (144, 1, N'26F', 26, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (145, 1, N'27A', 27, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (146, 1, N'27B', 27, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (147, 1, N'27C', 27, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (148, 1, N'27D', 27, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (149, 1, N'27E', 27, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (150, 1, N'27F', 27, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (151, 1, N'28A', 28, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (152, 1, N'28B', 28, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (153, 1, N'28C', 28, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (154, 1, N'28D', 28, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (155, 1, N'28E', 28, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (156, 1, N'28F', 28, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (157, 1, N'29A', 29, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (158, 1, N'29B', 29, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (159, 1, N'29C', 29, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (160, 1, N'29D', 29, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6400000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (161, 1, N'29E', 29, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (162, 1, N'29F', 29, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (163, 1, N'30A', 30, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (164, 1, N'30B', 30, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (165, 1, N'30C', 30, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (166, 1, N'30D', 30, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (167, 1, N'30E', 30, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (168, 1, N'30F', 30, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (169, 1, N'31A', 31, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (170, 1, N'31B', 31, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (171, 1, N'31C', 31, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (172, 1, N'31D', 31, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (173, 1, N'31E', 31, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (174, 1, N'31F', 31, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (175, 1, N'32A', 32, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (176, 1, N'32B', 32, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (177, 1, N'32C', 32, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (178, 1, N'32D', 32, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (179, 1, N'32E', 32, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (180, 1, N'32F', 32, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (181, 1, N'33A', 33, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (182, 1, N'33B', 33, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (183, 1, N'33C', 33, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (184, 1, N'33D', 33, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6433333' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (185, 1, N'33E', 33, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (186, 1, N'33F', 33, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (187, 1, N'34A', 34, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (188, 1, N'34B', 34, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (189, 1, N'34C', 34, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (190, 1, N'34D', 34, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (191, 1, N'34E', 34, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (192, 1, N'34F', 34, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (193, 1, N'35A', 35, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (194, 1, N'35B', 35, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (195, 1, N'35C', 35, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (196, 1, N'35D', 35, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (197, 1, N'35E', 35, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (198, 1, N'35F', 35, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (199, 1, N'36A', 36, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+GO
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (200, 1, N'36B', 36, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (201, 1, N'36C', 36, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (202, 1, N'36D', 36, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (203, 1, N'36E', 36, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (204, 1, N'36F', 36, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (205, 1, N'37A', 37, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (206, 1, N'37B', 37, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (207, 1, N'37C', 37, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (208, 1, N'37D', 37, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (209, 1, N'37E', 37, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (210, 1, N'37F', 37, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (211, 1, N'38A', 38, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (212, 1, N'38B', 38, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (213, 1, N'38C', 38, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (214, 1, N'38D', 38, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6466667' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (215, 1, N'38E', 38, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (216, 1, N'38F', 38, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (217, 1, N'39A', 39, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (218, 1, N'39B', 39, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (219, 1, N'39C', 39, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (220, 1, N'39D', 39, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (221, 1, N'39E', 39, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (222, 1, N'39F', 39, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (223, 1, N'40A', 40, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (224, 1, N'40B', 40, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (225, 1, N'40C', 40, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (226, 1, N'40D', 40, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (227, 1, N'40E', 40, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (228, 1, N'40F', 40, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-08T22:24:30.6500000' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (229, 2, N'3A', 3, N'A', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-13T12:03:06.8110988' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (230, 2, N'3B', 3, N'B', 2, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-13T12:03:06.8112390' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (231, 2, N'3C', 3, N'C', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 0, CAST(N'2025-07-13T12:03:06.8112399' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (232, 2, N'3D', 3, N'D', 2, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112400' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (233, 2, N'3E', 3, N'E', 2, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112402' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (234, 2, N'3F', 3, N'F', 2, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112415' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (235, 2, N'9A', 9, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112565' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (236, 2, N'9B', 9, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112716' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (237, 2, N'9C', 9, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112720' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (238, 2, N'9D', 9, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112723' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (239, 2, N'9E', 9, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112725' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (240, 2, N'9F', 9, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112726' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (241, 2, N'10A', 10, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112728' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (242, 2, N'10B', 10, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112732' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (243, 2, N'10C', 10, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112733' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (244, 2, N'10D', 10, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112740' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (245, 2, N'10E', 10, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112745' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (246, 2, N'10F', 10, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112747' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (247, 2, N'11A', 11, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112749' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (248, 2, N'11B', 11, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112750' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (249, 2, N'11C', 11, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112751' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (250, 2, N'11D', 11, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112753' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (251, 2, N'11E', 11, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112754' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (252, 2, N'11F', 11, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112756' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (253, 2, N'12A', 12, N'A', 1, 1, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112757' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (254, 2, N'12B', 12, N'B', 1, 0, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112759' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (255, 2, N'12C', 12, N'C', 1, 0, 1, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112760' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (256, 2, N'12D', 12, N'D', 1, 0, 1, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112761' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (257, 2, N'12E', 12, N'E', 1, 0, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112763' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (258, 2, N'12F', 12, N'F', 1, 1, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112764' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (259, 2, N'13A', 13, N'A', 1, 1, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112766' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (260, 2, N'13B', 13, N'B', 1, 0, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112767' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (261, 2, N'13C', 13, N'C', 1, 0, 1, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112769' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (262, 2, N'13D', 13, N'D', 1, 0, 1, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112771' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (263, 2, N'13E', 13, N'E', 1, 0, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112772' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (264, 2, N'13F', 13, N'F', 1, 1, 0, 1, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112774' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (265, 2, N'14A', 14, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112786' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (266, 2, N'14B', 14, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112788' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (267, 2, N'14C', 14, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112789' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (268, 2, N'14D', 14, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112790' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (269, 2, N'14E', 14, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112792' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (270, 2, N'14F', 14, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112793' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (271, 2, N'15A', 15, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112794' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (272, 2, N'15B', 15, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112796' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (273, 2, N'15C', 15, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112797' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (274, 2, N'15D', 15, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112799' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (275, 2, N'15E', 15, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112800' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (276, 2, N'15F', 15, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112801' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (277, 2, N'16A', 16, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112803' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (278, 2, N'16B', 16, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112804' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (279, 2, N'16C', 16, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112806' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (280, 2, N'16D', 16, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112807' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (281, 2, N'16E', 16, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112809' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (282, 2, N'16F', 16, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112810' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (283, 2, N'17A', 17, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112811' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (284, 2, N'17B', 17, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112813' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (285, 2, N'17C', 17, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112814' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (286, 2, N'17D', 17, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112815' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (287, 2, N'17E', 17, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112817' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (288, 2, N'17F', 17, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112818' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (289, 2, N'18A', 18, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112819' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (290, 2, N'18B', 18, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112821' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (291, 2, N'18C', 18, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112822' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (292, 2, N'18D', 18, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112824' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (293, 2, N'18E', 18, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112825' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (294, 2, N'18F', 18, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112827' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (295, 2, N'19A', 19, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112828' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (296, 2, N'19B', 19, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112830' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (297, 2, N'19C', 19, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112831' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (298, 2, N'19D', 19, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112832' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (299, 2, N'19E', 19, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112834' AS DateTime2))
+GO
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (300, 2, N'19F', 19, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112835' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (301, 2, N'20A', 20, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112836' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (302, 2, N'20B', 20, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112889' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (303, 2, N'20C', 20, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112890' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (304, 2, N'20D', 20, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112892' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (305, 2, N'20E', 20, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112893' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (306, 2, N'20F', 20, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112895' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (307, 2, N'21A', 21, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112896' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (308, 2, N'21B', 21, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112897' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (309, 2, N'21C', 21, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112899' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (310, 2, N'21D', 21, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112900' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (311, 2, N'21E', 21, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112902' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (312, 2, N'21F', 21, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112903' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (313, 2, N'22A', 22, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112904' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (314, 2, N'22B', 22, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112906' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (315, 2, N'22C', 22, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112907' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (316, 2, N'22D', 22, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112908' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (317, 2, N'22E', 22, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112910' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (318, 2, N'22F', 22, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112911' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (319, 2, N'23A', 23, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112912' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (320, 2, N'23B', 23, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112914' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (321, 2, N'23C', 23, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112915' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (322, 2, N'23D', 23, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112916' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (323, 2, N'23E', 23, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112918' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (324, 2, N'23F', 23, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112919' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (325, 2, N'24A', 24, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112921' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (326, 2, N'24B', 24, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112922' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (327, 2, N'24C', 24, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112923' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (328, 2, N'24D', 24, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112925' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (329, 2, N'24E', 24, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112926' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (330, 2, N'24F', 24, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112927' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (331, 2, N'25A', 25, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112929' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (332, 2, N'25B', 25, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112930' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (333, 2, N'25C', 25, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112932' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (334, 2, N'25D', 25, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112933' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (335, 2, N'25E', 25, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112935' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (336, 2, N'25F', 25, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112936' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (337, 2, N'26A', 26, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112937' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (338, 2, N'26B', 26, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112939' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (339, 2, N'26C', 26, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112940' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (340, 2, N'26D', 26, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112941' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (341, 2, N'26E', 26, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112943' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (342, 2, N'26F', 26, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112944' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (343, 2, N'27A', 27, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112946' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (344, 2, N'27B', 27, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112947' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (345, 2, N'27C', 27, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112962' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (346, 2, N'27D', 27, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112963' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (347, 2, N'27E', 27, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112965' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (348, 2, N'27F', 27, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112966' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (349, 2, N'28A', 28, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112968' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (350, 2, N'28B', 28, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112969' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (351, 2, N'28C', 28, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112970' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (352, 2, N'28D', 28, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112972' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (353, 2, N'28E', 28, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112973' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (354, 2, N'28F', 28, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112974' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (355, 2, N'29A', 29, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112976' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (356, 2, N'29B', 29, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112977' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (357, 2, N'29C', 29, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112979' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (358, 2, N'29D', 29, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112982' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (359, 2, N'29E', 29, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112983' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (360, 2, N'29F', 29, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112985' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (361, 2, N'30A', 30, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112986' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (362, 2, N'30B', 30, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112988' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (363, 2, N'30C', 30, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112989' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (364, 2, N'30D', 30, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112990' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (365, 2, N'30E', 30, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112992' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (366, 2, N'30F', 30, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112993' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (367, 2, N'31A', 31, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112995' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (368, 2, N'31B', 31, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112996' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (369, 2, N'31C', 31, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112998' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (370, 2, N'31D', 31, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8112999' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (371, 2, N'31E', 31, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113001' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (372, 2, N'31F', 31, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113002' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (373, 2, N'32A', 32, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113003' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (374, 2, N'32B', 32, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113005' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (375, 2, N'32C', 32, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113006' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (376, 2, N'32D', 32, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113016' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (377, 2, N'32E', 32, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113017' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (378, 2, N'32F', 32, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113019' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (379, 2, N'33A', 33, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113020' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (380, 2, N'33B', 33, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113021' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (381, 2, N'33C', 33, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113023' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (382, 2, N'33D', 33, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113024' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (383, 2, N'33E', 33, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113026' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (384, 2, N'33F', 33, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113027' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (385, 2, N'34A', 34, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113028' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (386, 2, N'34B', 34, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113030' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (387, 2, N'34C', 34, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113031' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (388, 2, N'34D', 34, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113032' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (389, 2, N'34E', 34, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113034' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (390, 2, N'34F', 34, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113035' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (391, 2, N'35A', 35, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113037' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (392, 2, N'35B', 35, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113038' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (393, 2, N'35C', 35, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113039' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (394, 2, N'35D', 35, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113041' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (395, 2, N'35E', 35, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113042' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (396, 2, N'35F', 35, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113044' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (397, 2, N'36A', 36, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113045' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (398, 2, N'36B', 36, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113046' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (399, 2, N'36C', 36, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113048' AS DateTime2))
+GO
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (400, 2, N'36D', 36, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113050' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (401, 2, N'36E', 36, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113051' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (402, 2, N'36F', 36, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113052' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (403, 2, N'37A', 37, N'A', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113054' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (404, 2, N'37B', 37, N'B', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113055' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (405, 2, N'37C', 37, N'C', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113057' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (406, 2, N'37D', 37, N'D', 1, 0, 1, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113058' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (407, 2, N'37E', 37, N'E', 1, 0, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113059' AS DateTime2))
+INSERT [dbo].[seats] ([seat_id], [flight_id], [seat_number], [seat_row], [seat_column], [class_id], [is_window], [is_aisle], [is_emergency_exit], [extra_fee], [is_available], [created_at]) VALUES (408, 2, N'37F', 37, N'F', 1, 1, 0, 0, CAST(0.00 AS Decimal(10, 2)), 1, CAST(N'2025-07-13T12:03:06.8113061' AS DateTime2))
+SET IDENTITY_INSERT [dbo].[seats] OFF
+GO
+SET IDENTITY_INSERT [dbo].[users] ON 
+
+INSERT [dbo].[users] ([user_id], [username], [email], [password], [full_name], [phone], [date_of_birth], [gender], [created_at], [updated_at], [is_active]) VALUES (1, N'nguyenvana', N'nguyenvana@gmail.com', N'$2a$11$FSm09K/HemWQvj1Cp1SOwO91zrJog6b0SyoexL0VBzpxO8NxDF1da', N'Nguyễn Văn A', N'0901234567', CAST(N'1990-05-15' AS Date), N'Nam', CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), 1)
+INSERT [dbo].[users] ([user_id], [username], [email], [password], [full_name], [phone], [date_of_birth], [gender], [created_at], [updated_at], [is_active]) VALUES (2, N'tranthib', N'tranthib@gmail.com', N'$2a$11$FSm09K/HemWQvj1Cp1SOwO91zrJog6b0SyoexL0VBzpxO8NxDF1da', N'Trần Thị B', N'0912345678', CAST(N'1992-08-20' AS Date), N'Nữ', CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), 1)
+INSERT [dbo].[users] ([user_id], [username], [email], [password], [full_name], [phone], [date_of_birth], [gender], [created_at], [updated_at], [is_active]) VALUES (3, N'levancuong', N'levancuong@gmail.com', N'$2a$11$FSm09K/HemWQvj1Cp1SOwO91zrJog6b0SyoexL0VBzpxO8NxDF1da', N'Lê Văn Cường', N'0923456789', CAST(N'1988-12-10' AS Date), N'Nam', CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), 1)
+INSERT [dbo].[users] ([user_id], [username], [email], [password], [full_name], [phone], [date_of_birth], [gender], [created_at], [updated_at], [is_active]) VALUES (4, N'phamthidung', N'phamthidung@gmail.com', N'$2a$11$FSm09K/HemWQvj1Cp1SOwO91zrJog6b0SyoexL0VBzpxO8NxDF1da', N'Phạm Thị Dung', N'0934567890', CAST(N'1995-03-25' AS Date), N'Nữ', CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), 1)
+INSERT [dbo].[users] ([user_id], [username], [email], [password], [full_name], [phone], [date_of_birth], [gender], [created_at], [updated_at], [is_active]) VALUES (5, N'hoangvane', N'hoangvane@gmail.com', N'$2a$11$FSm09K/HemWQvj1Cp1SOwO91zrJog6b0SyoexL0VBzpxO8NxDF1da', N'Hoàng Văn E', N'0945678901', CAST(N'1993-07-30' AS Date), N'Nam', CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), CAST(N'2025-07-08T22:24:30.6033333' AS DateTime2), 1)
+SET IDENTITY_INSERT [dbo].[users] OFF
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__airlines__7E724356278FFFA5]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[airlines] ADD UNIQUE NONCLUSTERED 
+(
+	[airline_code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__airports__E949ADC77A9BEED6]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[airports] ADD UNIQUE NONCLUSTERED 
+(
+	[airport_code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [UQ_booking_seats]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[booking_seats] ADD  CONSTRAINT [UQ_booking_seats] UNIQUE NONCLUSTERED 
+(
+	[booking_id] ASC,
+	[seat_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__bookings__BADA455955475261]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[bookings] ADD UNIQUE NONCLUSTERED 
+(
+	[booking_reference] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_bookings_reference]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_bookings_reference] ON [dbo].[bookings]
+(
+	[booking_reference] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_bookings_status]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_bookings_status] ON [dbo].[bookings]
+(
+	[booking_status] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_bookings_user]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_bookings_user] ON [dbo].[bookings]
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_flights_route_date]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_flights_route_date] ON [dbo].[flights]
+(
+	[departure_airport_id] ASC,
+	[arrival_airport_id] ASC,
+	[departure_time] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_flights_status]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_flights_status] ON [dbo].[flights]
+(
+	[status] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Notifications_CreatedAt]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Notifications_CreatedAt] ON [dbo].[Notifications]
+(
+	[CreatedAt] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Notifications_RelatedBookingId]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Notifications_RelatedBookingId] ON [dbo].[Notifications]
+(
+	[RelatedBookingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Notifications_RelatedFlightId]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Notifications_RelatedFlightId] ON [dbo].[Notifications]
+(
+	[RelatedFlightId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Notifications_UserId_Status]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Notifications_UserId_Status] ON [dbo].[Notifications]
+(
+	[UserId] ASC,
+	[Status] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Payments_BookingId]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Payments_BookingId] ON [dbo].[Payments]
+(
+	[BookingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Payments_TransactionId]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Payments_TransactionId] ON [dbo].[Payments]
+(
+	[TransactionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ_seats_flight_number]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[seats] ADD  CONSTRAINT [UQ_seats_flight_number] UNIQUE NONCLUSTERED 
+(
+	[flight_id] ASC,
+	[seat_number] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_seats_class]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_seats_class] ON [dbo].[seats]
+(
+	[class_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_seats_flight_available]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_seats_flight_available] ON [dbo].[seats]
+(
+	[flight_id] ASC,
+	[is_available] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__users__AB6E6164C55A437B]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
+(
+	[email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__users__F3DBC57210B57068]    Script Date: 7/14/2025 1:58:24 PM ******/
+ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
+(
+	[username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_users_email]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_users_email] ON [dbo].[users]
+(
+	[email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_users_username]    Script Date: 7/14/2025 1:58:24 PM ******/
+CREATE NONCLUSTERED INDEX [IX_users_username] ON [dbo].[users]
+(
+	[username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[airlines] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[airports] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[booking_seats] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[bookings] ADD  DEFAULT ('CONFIRMED') FOR [booking_status]
+GO
+ALTER TABLE [dbo].[bookings] ADD  DEFAULT ('PENDING') FOR [payment_status]
+GO
+ALTER TABLE [dbo].[bookings] ADD  DEFAULT (getdate()) FOR [booking_date]
+GO
+ALTER TABLE [dbo].[flights] ADD  DEFAULT ('SCHEDULED') FOR [status]
+GO
+ALTER TABLE [dbo].[flights] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[seat_classes] ADD  DEFAULT ((1.0)) FOR [price_multiplier]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT ((0)) FOR [is_window]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT ((0)) FOR [is_aisle]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT ((0)) FOR [is_emergency_exit]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT ((0)) FOR [extra_fee]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT ((1)) FOR [is_available]
+GO
+ALTER TABLE [dbo].[seats] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+ALTER TABLE [dbo].[booking_seats]  WITH CHECK ADD  CONSTRAINT [FK_booking_seats_booking] FOREIGN KEY([booking_id])
+REFERENCES [dbo].[bookings] ([booking_id])
+GO
+ALTER TABLE [dbo].[booking_seats] CHECK CONSTRAINT [FK_booking_seats_booking]
+GO
+ALTER TABLE [dbo].[booking_seats]  WITH CHECK ADD  CONSTRAINT [FK_booking_seats_seat] FOREIGN KEY([seat_id])
+REFERENCES [dbo].[seats] ([seat_id])
+GO
+ALTER TABLE [dbo].[booking_seats] CHECK CONSTRAINT [FK_booking_seats_seat]
+GO
+ALTER TABLE [dbo].[bookings]  WITH CHECK ADD  CONSTRAINT [FK_bookings_flight] FOREIGN KEY([flight_id])
+REFERENCES [dbo].[flights] ([flight_id])
+GO
+ALTER TABLE [dbo].[bookings] CHECK CONSTRAINT [FK_bookings_flight]
+GO
+ALTER TABLE [dbo].[bookings]  WITH CHECK ADD  CONSTRAINT [FK_bookings_user] FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([user_id])
+GO
+ALTER TABLE [dbo].[bookings] CHECK CONSTRAINT [FK_bookings_user]
+GO
+ALTER TABLE [dbo].[flights]  WITH CHECK ADD  CONSTRAINT [FK_flights_aircraft] FOREIGN KEY([aircraft_type_id])
+REFERENCES [dbo].[aircraft_types] ([aircraft_type_id])
+GO
+ALTER TABLE [dbo].[flights] CHECK CONSTRAINT [FK_flights_aircraft]
+GO
+ALTER TABLE [dbo].[flights]  WITH CHECK ADD  CONSTRAINT [FK_flights_airline] FOREIGN KEY([airline_id])
+REFERENCES [dbo].[airlines] ([airline_id])
+GO
+ALTER TABLE [dbo].[flights] CHECK CONSTRAINT [FK_flights_airline]
+GO
+ALTER TABLE [dbo].[flights]  WITH CHECK ADD  CONSTRAINT [FK_flights_arrival] FOREIGN KEY([arrival_airport_id])
+REFERENCES [dbo].[airports] ([airport_id])
+GO
+ALTER TABLE [dbo].[flights] CHECK CONSTRAINT [FK_flights_arrival]
+GO
+ALTER TABLE [dbo].[flights]  WITH CHECK ADD  CONSTRAINT [FK_flights_departure] FOREIGN KEY([departure_airport_id])
+REFERENCES [dbo].[airports] ([airport_id])
+GO
+ALTER TABLE [dbo].[flights] CHECK CONSTRAINT [FK_flights_departure]
+GO
+ALTER TABLE [dbo].[Notifications]  WITH CHECK ADD  CONSTRAINT [FK_Notifications_bookings_RelatedBookingId] FOREIGN KEY([RelatedBookingId])
+REFERENCES [dbo].[bookings] ([booking_id])
+GO
+ALTER TABLE [dbo].[Notifications] CHECK CONSTRAINT [FK_Notifications_bookings_RelatedBookingId]
+GO
+ALTER TABLE [dbo].[Notifications]  WITH CHECK ADD  CONSTRAINT [FK_Notifications_flights_RelatedFlightId] FOREIGN KEY([RelatedFlightId])
+REFERENCES [dbo].[flights] ([flight_id])
+GO
+ALTER TABLE [dbo].[Notifications] CHECK CONSTRAINT [FK_Notifications_flights_RelatedFlightId]
+GO
+ALTER TABLE [dbo].[Notifications]  WITH CHECK ADD  CONSTRAINT [FK_Notifications_users_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[users] ([user_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Notifications] CHECK CONSTRAINT [FK_Notifications_users_UserId]
+GO
+ALTER TABLE [dbo].[Payments]  WITH CHECK ADD  CONSTRAINT [FK_Payments_bookings_BookingId] FOREIGN KEY([BookingId])
+REFERENCES [dbo].[bookings] ([booking_id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Payments] CHECK CONSTRAINT [FK_Payments_bookings_BookingId]
+GO
+ALTER TABLE [dbo].[seats]  WITH CHECK ADD  CONSTRAINT [FK_seats_class] FOREIGN KEY([class_id])
+REFERENCES [dbo].[seat_classes] ([class_id])
+GO
+ALTER TABLE [dbo].[seats] CHECK CONSTRAINT [FK_seats_class]
+GO
+ALTER TABLE [dbo].[seats]  WITH CHECK ADD  CONSTRAINT [FK_seats_flight] FOREIGN KEY([flight_id])
+REFERENCES [dbo].[flights] ([flight_id])
+GO
+ALTER TABLE [dbo].[seats] CHECK CONSTRAINT [FK_seats_flight]
+GO
+USE [master]
+GO
+ALTER DATABASE [FlightBooking] SET  READ_WRITE 
+GO

@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Logs
+*.log
+
+# User files
+*.user
+*.suo
+
+# Build
+build/
+.gradle/
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
