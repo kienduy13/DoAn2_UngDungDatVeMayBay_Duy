@@ -1,48 +1,102 @@
-Giới thiệu Ứng Dụng Đặt Vé Máy Bay & tư vấn Lên Lịch Trình Du Lịch Tự Động bằng AI [Asp.net + Android] đơn giản
-Ứng dụng ở mức độ cơ bản, dễ tiếp cận, giúp sinh viên có thể đọc hiểu code nhanh, triển khai và sử dụng để làm báo cáo bài tập lớn, đồ án hoặc thuyết trình nhóm. Mã nguồn được viết rõ ràng, dễ tùy chỉnh và phù hợp để mở rộng thêm các tính năng nâng cao sau này.
-Tham khảo thêm một số đề tài tương tự: đồ án, android studio
+✈️ Giới thiệu Ứng Dụng Di Động Đặt Vé Máy Bay & Tư Vấn Lịch Trình Du Lịch Tự Động bằng AI
 
-Nền tảng phát triển
-Web: ASP.NET (RESTFUL API)
+Ứng dụng đặt vé máy bay trên nền tảng di động được xây dựng ở mức độ cơ bản, dễ tiếp cận, giúp sinh viên có thể đọc hiểu code nhanh chóng, triển khai và sử dụng để làm báo cáo bài tập lớn, đồ án hoặc thuyết trình nhóm. Mã nguồn được viết rõ ràng, dễ tùy chỉnh và phù hợp để mở rộng thêm các tính năng nâng cao trong tương lai.
 
-Mobile: Android (Java)
+Ứng dụng tập trung vào việc hỗ trợ người dùng tìm kiếm chuyến bay, đặt vé và gợi ý lịch trình du lịch tự động bằng trí tuệ nhân tạo, mang lại trải nghiệm tiện lợi và hiện đại.
 
-Cơ sở dữ liệu: SQL Server
+🧰 Công nghệ sử dụng
+📱 Mobile: Android (Java)
+🌐 Backend API: ASP.NET Web API (RESTful)
+🗄️ Cơ sở dữ liệu: SQL Server
+🤖 AI: Gemini AI (gợi ý lịch trình du lịch tự động)
+🎓 Đề tài đồ án – Ứng dụng AI trong đặt vé máy bay
 
-🎓 Đề tài đồ án mới – Ứng dụng công nghệ AI trong du lịch
-Một hệ thống hỗ trợ đặt vé máy bay và gợi ý lịch trình du lịch thông minh, kết hợp giữa công nghệ AI và cơ sở dữ liệu SQL Server. Ứng dụng hướng đến nâng cao trải nghiệm người dùng thông qua việc cá nhân hóa chuyến đi dựa trên thời tiết, sở thích và thời gian lưu trú.
+Đây là hệ thống hỗ trợ đặt vé máy bay và gợi ý lịch trình du lịch thông minh trên thiết bị di động. Ứng dụng kết hợp giữa công nghệ AI và cơ sở dữ liệu SQL Server nhằm nâng cao trải nghiệm người dùng thông qua việc cá nhân hóa chuyến đi dựa trên sở thích, thời gian lưu trú và điều kiện thực tế.
 
 📌 Tính năng nổi bật
 🔒 Phân quyền hệ thống
-Hiện tại ứng dụng chỉ phát triển với 1 phân quyền là khách hàng. Giao diện và chức năng dành cho admin (nhập vé, quản lý chuyến bay…) chưa được triển khai trong phiên bản này, dữ liệu được cập nhật trực tiếp từ cơ sở dữ liệu.
+
+Ứng dụng hiện tại được phát triển với một phân quyền chính là khách hàng.
+Các chức năng quản trị như quản lý chuyến bay, nhập dữ liệu vé chưa được triển khai giao diện Admin, dữ liệu được cập nhật trực tiếp từ cơ sở dữ liệu SQL Server.
 
 🔐 Xác thực và quản lý tài khoản
-Đăng ký, đăng nhập tài khoản khách hàng
-
-Quên mật khẩu: Gửi mã OTP qua email để xác minh và đổi mật khẩu
-
-Cập nhật và xem thông tin hồ sơ cá nhân
-
+Đăng ký tài khoản người dùng
+Đăng nhập hệ thống
+Quên mật khẩu bằng OTP gửi qua Email
+Cập nhật thông tin cá nhân
+Xem hồ sơ người dùng
 ✈️ Đặt vé máy bay
-Chọn chuyến bay, và hàng ghế mong muốn
-
-Tích hợp chức năng thanh toán nội bộ (giả lập)
-
-Nhận thông báo vé đặt thành công qua Gmail
-
-Hiển thị thông báo nhanh trên tabbar khi có đơn đặt vé mới
-
-📅 Quản lý lịch sử và thông báo
-Trang xem lịch sử đặt vé
-
-Hiển thị chi tiết thông tin vé đã đặt
-
+Tìm kiếm chuyến bay theo điểm đi và điểm đến
+Chọn chuyến bay và hạng ghế mong muốn
+Thanh toán nội bộ (giả lập)
+Gửi email xác nhận đặt vé thành công
+Hiển thị thông báo nhanh khi đặt vé thành công
+📅 Quản lý lịch sử đặt vé
+Xem danh sách vé đã đặt
+Hiển thị chi tiết thông tin chuyến bay
 Lưu trữ dữ liệu đặt vé trên SQL Server
+Dữ liệu chuyến bay được nhập trực tiếp từ cơ sở dữ liệu
+🤖 Tính năng AI (Gemini AI)
+Gợi ý lịch trình du lịch tự động
+Đề xuất địa điểm tham quan theo sở thích người dùng
+Phân tích thời gian lưu trú để xây dựng lịch trình hợp lý
+Hỗ trợ lên kế hoạch chuyến đi sau khi đặt vé máy bay
+🎯 Mục tiêu ứng dụng
 
-Thông tin vé và chuyến bay được nhập thủ công từ CSDL SQL Server (chưa có giao diện Admin)
+Ứng dụng hướng đến việc xây dựng một hệ thống đặt vé máy bay trên thiết bị di động đơn giản, dễ sử dụng và tích hợp AI nhằm:
 
-🤖 Tính năng AI của gemini-2.0
-Gợi ý lịch trình du lịch thông minh, dựa trên: Sở thích cá nhân người dùng (ăn uống, khám phá, nghỉ dưỡng…) và Thời gian lưu trú
+Tăng trải nghiệm người dùng ✨
+Hỗ trợ lên lịch trình tự động 🤖
+Dễ dàng mở rộng tính năng trong tương lai 🚀
+Phù hợp làm đồ án hoặc bài tập lớn cho sinh viên 🎓
+
+CẤU TRÚC THƯ MỤC 
+FlightBookingApp/
+│
+├── backend/                     # ASP.NET Web API
+│   ├── Controllers/             # API Controllers
+│   ├── Models/                  # Entity Models
+│   ├── DTOs/                    # Data Transfer Objects
+│   ├── Services/                # Business Logic
+│   ├── Repositories/            # Data Access Layer
+│   ├── Data/                    # DbContext & cấu hình SQL Server
+│   ├── Helpers/                 # JWT, Email, OTP...
+│   ├── appsettings.json         # Config hệ thống
+│   └── Program.cs               # Entry point
+│
+├── android/                     # Android App
+│   ├── app/src/main/java/com/flightbooking/
+│   │   ├── activities/          # Các màn hình Activity
+│   │   │   ├── LoginActivity.java
+│   │   │   ├── RegisterActivity.java
+│   │   │   ├── HomeActivity.java
+│   │   │   ├── FlightListActivity.java
+│   │   │   ├── BookingActivity.java
+│   │   │   └── AIPlannerActivity.java
+│   │   │
+│   │   ├── adapters/            # RecyclerView Adapter
+│   │   ├── models/              # Model dữ liệu
+│   │   ├── api/                 # Retrofit API client
+│   │   ├── utils/               # Helper, Constants
+│   │   └── services/            # AI Service, Auth Service
+│   │
+│   ├── res/
+│   │   ├── layout/              # XML giao diện
+│   │   ├── drawable/            # Icon, image
+│   │   └── values/              # color, string
+│   │
+│   └── AndroidManifest.xml
+│
+├── database/                    # SQL Server Scripts
+│   ├── FlightBooking.sql
+│   └── sample_data.sql
+│
+├── docs/                        # Tài liệu đồ án
+│   ├── ERD.png
+│   ├── UseCase.png
+│   └── API_Document.txt
+│
+└── README.md
 
 LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
 
