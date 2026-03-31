@@ -1,4 +1,5 @@
 ```✈️ Giới thiệu Ứng Dụng Di Động Đặt Vé Máy Bay & Tư Vấn Lịch Trình Du Lịch Tự Động bằng AI
+LINK VIDEO DEMO : LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
 
 Ứng dụng đặt vé máy bay trên nền tảng di động được xây dựng ở mức độ cơ bản, dễ tiếp cận, giúp sinh viên có thể đọc hiểu code nhanh chóng, triển khai và sử dụng để làm báo cáo bài tập lớn, đồ án hoặc thuyết trình nhóm. Mã nguồn được viết rõ ràng, dễ tùy chỉnh và phù hợp để mở rộng thêm các tính năng nâng cao trong tương lai.
 
@@ -98,7 +99,6 @@ FlightBookingApp/
 │
 └── README.md
 
-LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
 
 Mật khẩu mysql management sever 
 tên đăng nhap 
