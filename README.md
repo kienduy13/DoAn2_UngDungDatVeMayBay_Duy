@@ -114,4 +114,6 @@ Huy123456
 
 Tác giả / Nhóm Đồ án
 Phát triển bởi Huỳnh Kiến Duy (225345) phục vụ cho đồ án 2 
+
+Dạ còn phần backend em có up riêng ra file backend bên trong tài khoản github của em nữa ạ
 ```
