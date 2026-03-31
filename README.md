@@ -51,7 +51,7 @@ Dễ dàng mở rộng tính năng trong tương lai 🚀
 Phù hợp làm đồ án hoặc bài tập lớn cho sinh viên 🎓
 
 CẤU TRÚC THƯ MỤC 
-FlightBookingApp/
+```FlightBookingApp/
 │
 ├── backend/                     # ASP.NET Web API
 │   ├── Controllers/             # API Controllers
@@ -96,7 +96,7 @@ FlightBookingApp/
 │   ├── UseCase.png
 │   └── API_Document.txt
 │
-└── README.md
+└── README.md```
 
 LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
 
