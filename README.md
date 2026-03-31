@@ -56,3 +56,7 @@ tên đăng nhap Android
 Quachuy
 mật khẩu 
 Huy123456
+
+
+Tác giả / Nhóm Đồ án
+Phát triển bởi Huỳnh Kiến Duy (225345) phục vụ cho đồ án 2 
