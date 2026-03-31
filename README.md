@@ -45,3 +45,9 @@ Thông tin vé và chuyến bay được nhập thủ công từ CSDL SQL Server
 Gợi ý lịch trình du lịch thông minh, dựa trên: Sở thích cá nhân người dùng (ăn uống, khám phá, nghỉ dưỡng…) và Thời gian lưu trú
 
 LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
+
+Mật khẩu mysql management sever 
+tên đăng nhap 
+sa
+mật khẩu
+12341234
