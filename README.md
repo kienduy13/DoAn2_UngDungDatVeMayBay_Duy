@@ -1,4 +1,4 @@
-✈️ Giới thiệu Ứng Dụng Di Động Đặt Vé Máy Bay & Tư Vấn Lịch Trình Du Lịch Tự Động bằng AI
+```✈️ Giới thiệu Ứng Dụng Di Động Đặt Vé Máy Bay & Tư Vấn Lịch Trình Du Lịch Tự Động bằng AI
 
 Ứng dụng đặt vé máy bay trên nền tảng di động được xây dựng ở mức độ cơ bản, dễ tiếp cận, giúp sinh viên có thể đọc hiểu code nhanh chóng, triển khai và sử dụng để làm báo cáo bài tập lớn, đồ án hoặc thuyết trình nhóm. Mã nguồn được viết rõ ràng, dễ tùy chỉnh và phù hợp để mở rộng thêm các tính năng nâng cao trong tương lai.
 
@@ -51,7 +51,7 @@ Dễ dàng mở rộng tính năng trong tương lai 🚀
 Phù hợp làm đồ án hoặc bài tập lớn cho sinh viên 🎓
 
 CẤU TRÚC THƯ MỤC 
-```FlightBookingApp/
+FlightBookingApp/
 │
 ├── backend/                     # ASP.NET Web API
 │   ├── Controllers/             # API Controllers
@@ -96,7 +96,7 @@ CẤU TRÚC THƯ MỤC
 │   ├── UseCase.png
 │   └── API_Document.txt
 │
-└── README.md```
+└── README.md
 
 LINK DEMO https://drive.google.com/file/d/1KZ2I-OFNNRNi2TGQG0T9JFaAjOh-pQNf/view?usp=drive_link
 
@@ -114,3 +114,4 @@ Huy123456
 
 Tác giả / Nhóm Đồ án
 Phát triển bởi Huỳnh Kiến Duy (225345) phục vụ cho đồ án 2 
+```
