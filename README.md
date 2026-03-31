@@ -66,7 +66,7 @@ FlightBookingApp/
 │
 ├── android/                     # Android App
 │   ├── app/src/main/java/com/flightbooking/
-│   │   ├── activities/          # Các màn hình Activity
+│   │   ├── activities/
 │   │   │   ├── LoginActivity.java
 │   │   │   ├── RegisterActivity.java
 │   │   │   ├── HomeActivity.java
@@ -74,24 +74,24 @@ FlightBookingApp/
 │   │   │   ├── BookingActivity.java
 │   │   │   └── AIPlannerActivity.java
 │   │   │
-│   │   ├── adapters/            # RecyclerView Adapter
-│   │   ├── models/              # Model dữ liệu
-│   │   ├── api/                 # Retrofit API client
-│   │   ├── utils/               # Helper, Constants
-│   │   └── services/            # AI Service, Auth Service
+│   │   ├── adapters/
+│   │   ├── models/
+│   │   ├── api/
+│   │   ├── utils/
+│   │   └── services/
 │   │
 │   ├── res/
-│   │   ├── layout/              # XML giao diện
-│   │   ├── drawable/            # Icon, image
-│   │   └── values/              # color, string
+│   │   ├── layout/
+│   │   ├── drawable/
+│   │   └── values/
 │   │
 │   └── AndroidManifest.xml
 │
-├── database/                    # SQL Server Scripts
+├── database/
 │   ├── FlightBooking.sql
 │   └── sample_data.sql
 │
-├── docs/                        # Tài liệu đồ án
+├── docs/
 │   ├── ERD.png
 │   ├── UseCase.png
 │   └── API_Document.txt
