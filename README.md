@@ -51,3 +51,8 @@ tên đăng nhap
 sa
 mật khẩu
 12341234
+
+tên đăng nhap Android 
+Quachuy
+mật khẩu 
+Huy123456
